@@ -1,14 +1,17 @@
 package com.example.lab_week_02_b
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 
-class   ResultActivity : AppCompatActivity() {
+class ResultActivity : AppCompatActivity() {
     companion object {
         const val COLOR_KEY = "COLOR_KEY"
+        const val ERROR_KEY = "ERROR_KEY"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,13 +22,27 @@ class   ResultActivity : AppCompatActivity() {
 
         if (!colorCode.isNullOrEmpty()) {
             val backgroundScreen = findViewById<ConstraintLayout>(R.id.background_screen)
-            backgroundScreen.setBackgroundColor(Color.parseColor("#$colorCode"))
 
-            val resultMessage = findViewById<TextView>(R.id.color_code_result_message)
-            resultMessage.text = getString(
-                R.string.color_code_result_message,
-                colorCode.uppercase()
-            )
+            try {
+                backgroundScreen.setBackgroundColor(Color.parseColor("#$colorCode"))
+
+                val resultMessage = findViewById<TextView>(R.id.color_code_result_message)
+                resultMessage.text = getString(
+                    R.string.color_code_result_message,
+                    colorCode.uppercase()
+                )
+            } catch (ex: IllegalArgumentException) {
+                val errorIntent = Intent()
+                errorIntent.putExtra(ERROR_KEY, true)
+                setResult(Activity.RESULT_OK, errorIntent)
+                finish()
+            }
+        } else {
+            // kalau colorCode kosong/null juga kirim error
+            val errorIntent = Intent()
+            errorIntent.putExtra(ERROR_KEY, true)
+            setResult(Activity.RESULT_OK, errorIntent)
+            finish()
         }
     }
 }
