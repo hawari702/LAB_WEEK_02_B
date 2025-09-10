@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -34,15 +35,21 @@ class ResultActivity : AppCompatActivity() {
             } catch (ex: IllegalArgumentException) {
                 val errorIntent = Intent()
                 errorIntent.putExtra(ERROR_KEY, true)
-                setResult(Activity.RESULT_OK, errorIntent)
+                setResult(RESULT_OK, errorIntent)
                 finish()
             }
         } else {
             // kalau colorCode kosong/null juga kirim error
             val errorIntent = Intent()
             errorIntent.putExtra(ERROR_KEY, true)
-            setResult(Activity.RESULT_OK, errorIntent)
+            setResult(RESULT_OK, errorIntent)
             finish()
+        }
+
+        // 👉 Tambahkan tombol BACK di sini
+        val backButton = findViewById<Button>(R.id.button_back)
+        backButton.setOnClickListener {
+            finish() // kembali ke MainActivity
         }
     }
 }
